@@ -1,9 +1,3 @@
-export const states = [
-  { value: "active", label: "Actif" },
-  { value: "inactive", label: "Inactif" },
-  { value: "pending", label: "En attente" },
-];
-
 export const usStates = [
   { name: "Alabama", abbreviation: "AL" },
   { name: "Alaska", abbreviation: "AK" },
@@ -74,19 +68,6 @@ export const departments = [
   { id: 4, name: "Finance" },
   { id: 5, name: "Ventes" },
 ];
-
-// Structure initiale du formulaire
-export const initialFormState = {
-  firstName: "",
-  lastName: "",
-  dateOfBirth: null,
-  startDate: null,
-  street: "",
-  city: "",
-  state: "",
-  zipCode: "",
-  department: "",
-};
 
 export const columns = [
   { id: "firstName", label: "First Name", minWidth: 100 },

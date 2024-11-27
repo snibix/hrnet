@@ -1,3 +1,4 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Box,
   Button,
@@ -9,15 +10,56 @@ import {
   Typography,
 } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import "snibix-modal/dist/Modal.css";
+import { z } from "zod";
 import { departments, usStates } from "../constants/formData";
 import theme from "../styles/theme";
+import MessageModal from "./MessageModal";
+
+const employeShema = z.object({
+  firstName: z.string().trim().min(1, { message: "First name is required" }),
+  lastName: z.string().trim().min(1, { message: "Last name is required" }),
+  dateOfBirth: z
+    .string()
+    .min(1, { message: "Date of Birth is required" })
+    .refine(
+      (date) => new Date().getFullYear() - new Date(date).getFullYear() > 16,
+      {
+        message: "Date birth must be at least 16 ",
+      }
+    ),
+  startDate: z
+    .string()
+    .refine((date) => !!date, { message: "Start Date is required" }),
+  street: z.string().trim().min(1, { message: "Street is required" }),
+  city: z.string().trim().min(1, { message: "City is required" }),
+  state: z.string().trim().min(1, { message: "State is required" }),
+  zipCode: z.string().min(1, { message: "Zip Code is required" }),
+  department: z.string().min(1, { message: "Department is required" }),
+});
 
 const EmployeeForm = () => {
   // const dispatch = useDispatch();
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+    reset,
+  } = useForm({
+    defaultValues: {},
+    resolver: zodResolver(employeShema),
+  });
+
+  const submit = (data) => {
+    console.log("Form Data:", data);
+
+    reset();
+    setIsOpen(true);
   };
 
   return (
@@ -36,44 +78,115 @@ const EmployeeForm = () => {
             >
               Create an Employee
             </Typography>
-
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit(submit)}>
               <Stack spacing={3}>
                 <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-                  <TextField fullWidth label="First Name" name="firstName" />
-                  <TextField fullWidth label="Last Name" name="lastName" />
+                  <TextField
+                    fullWidth
+                    type="text"
+                    label="First Name"
+                    {...register("firstName")}
+                    error={!!errors.firstName}
+                    helperText={errors.firstName?.message}
+                  />
+
+                  <TextField
+                    fullWidth
+                    label="Last Name"
+                    {...register("lastName")}
+                    error={!!errors.lastName}
+                    helperText={errors.lastName?.message}
+                  />
                 </Stack>
 
                 <Stack direction={{ xs: "column", sm: "row" }} spacing={3}>
-                  <DatePicker label="Date of birth" sx={{ width: "100%" }} />
-
-                  <DatePicker label="Start Date" sx={{ width: "100%" }} />
+                  <TextField
+                    fullWidth
+                    type="date"
+                    label="Date of Birth"
+                    slotProps={{
+                      inputLabel: {
+                        shrink: true,
+                      },
+                    }}
+                    {...register("dateOfBirth")}
+                    error={!!errors.dateOfBirth}
+                    helperText={errors.dateOfBirth?.message}
+                  />
+                  <TextField
+                    fullWidth
+                    type="date"
+                    label="Start Date"
+                    slotProps={{
+                      inputLabel: {
+                        shrink: true,
+                      },
+                    }}
+                    {...register("startDate")}
+                    error={!!errors.startDate}
+                    helperText={errors.startDate?.message}
+                  />
                 </Stack>
 
                 <Typography variant="h6" sx={{ mt: 2, color: "#5f6f1f" }}>
                   Adresse
                 </Typography>
 
-                <TextField fullWidth label="Street" name="street" />
+                <TextField
+                  fullWidth
+                  label="Street"
+                  {...register("street")}
+                  error={!!errors.street}
+                  helperText={errors.street?.message}
+                />
 
                 <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-                  <TextField fullWidth label="City" name="city" />
+                  <TextField
+                    fullWidth
+                    label="City"
+                    {...register("city")}
+                    error={!!errors.city}
+                    helperText={errors.city?.message}
+                  />
 
-                  <TextField fullWidth label="Zip Code" name="zipCode" />
+                  <TextField
+                    fullWidth
+                    label="Zip Code"
+                    {...register("zipCode")}
+                    onInput={(e) =>
+                      (e.target.value = e.target.value.replace(/\D+/, ""))
+                    }
+                    error={!!errors.zipCode}
+                    helperText={errors.zipCode?.message}
+                  />
                 </Stack>
                 <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-                  <TextField fullWidth select label="State" name="state">
+                  <TextField
+                    defaultValue=""
+                    fullWidth
+                    select
+                    label="State"
+                    {...register("state")}
+                    error={!!errors.state}
+                    helperText={errors.state?.message}
+                  >
                     {usStates.map((states) => (
-                      <MenuItem key={states.value} value={states.name}>
+                      <MenuItem
+                        key={states.abbreviation}
+                        value={states.abbreviation}
+                      >
                         {states.name}
                       </MenuItem>
                     ))}
                   </TextField>
                   <TextField
+                    defaultValue=""
                     fullWidth
                     select
                     label="Départment"
-                    name="department"
+                    {...register("department")}
+                    error={!!errors.department}
+                    helperText={errors.department?.message}
                   >
                     {departments.map((dept) => (
                       <MenuItem key={dept.id} value={dept.name}>
@@ -93,6 +206,12 @@ const EmployeeForm = () => {
                 </Stack>
               </Stack>
             </form>
+            <MessageModal
+              className="modal-backdrop"
+              isOpen={isOpen}
+              close={() => setIsOpen(false)}
+              title="Employee created susscessfuly !"
+            />
           </Paper>
         </Box>
       </LocalizationProvider>
