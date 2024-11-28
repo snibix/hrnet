@@ -1,26 +1,18 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit";
 
-const initialState = {
-  employees: [],
-};
-
 const employeeSlice = createSlice({
   name: "employee",
-  initialState,
+  initialState: JSON.parse(localStorage.getItem("employees")) || [],
   reducers: {
     addEmployee: (state, action) => {
-      state.employees.push({
+      state.push({
         id: nanoid(),
         ...action.payload,
       });
-    },
-    setEmployees: (state, action) => {
-      if (Array.isArray(action.payload)) {
-        state.employees = action.payload;
-      }
+      localStorage.setItem("employees", JSON.stringify(state));
     },
   },
 });
 
-export const { addEmployee, setEmployees } = employeeSlice.actions;
+export const { addEmployee } = employeeSlice.actions;
 export default employeeSlice.reducer;

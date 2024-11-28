@@ -13,9 +13,11 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import "snibix-modal/dist/Modal.css";
 import { z } from "zod";
 import { departments, usStates } from "../constants/formData";
+import { addEmployee } from "../redux/slice/employeeSlice";
 import theme from "../styles/theme";
 import MessageModal from "./MessageModal";
 
@@ -42,7 +44,7 @@ const employeShema = z.object({
 });
 
 const EmployeeForm = () => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
 
   const {
@@ -57,7 +59,7 @@ const EmployeeForm = () => {
 
   const submit = (data) => {
     console.log("Form Data:", data);
-
+    dispatch(addEmployee(data));
     reset();
     setIsOpen(true);
   };
@@ -132,15 +134,14 @@ const EmployeeForm = () => {
                   Adresse
                 </Typography>
 
-                <TextField
-                  fullWidth
-                  label="Street"
-                  {...register("street")}
-                  error={!!errors.street}
-                  helperText={errors.street?.message}
-                />
-
                 <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+                  <TextField
+                    fullWidth
+                    label="Street"
+                    {...register("street")}
+                    error={!!errors.street}
+                    helperText={errors.street?.message}
+                  />
                   <TextField
                     fullWidth
                     label="City"
