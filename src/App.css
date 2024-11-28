@@ -94,3 +94,41 @@ footer {
   margin-top: 3em;
 }
 /************************************************/
+
+.title-modal {
+  color: #5f6f1f;
+  font-weight: 600;
+}
+.modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  position: relative;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  z-index: 99;
+  align-items: center;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #000;
+}
+.button-close-modal {
+  background: transparent;
+  border: none;
+}
+.close-modal {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 25px;
+  height: 25px;
+  background-color: #5f6f1f;
+  border-radius: 20px;
+  padding: 5px;
+  cursor: pointer;
+}

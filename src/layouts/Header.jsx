@@ -5,13 +5,13 @@ function Header() {
       <div className="container">
         <nav className="nav-main">
           <NavLink to="/">
-            <i className="fa-solid fa-house"></i>Home
+            <span className="fa-solid fa-house"></span>Home
           </NavLink>
           <NavLink to="/new-employee">
-            <i className="fa-solid fa-user-plus"></i>Create an Employee
+            <span className="fa-solid fa-user-plus"></span>Create an Employee
           </NavLink>
           <NavLink to="/employee-list">
-            <i className="fa-regular fa-rectangle-list"></i>Employee List
+            <span className="fa-regular fa-rectangle-list"></span>Employee List
           </NavLink>
         </nav>
       </div>

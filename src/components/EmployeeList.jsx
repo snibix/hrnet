@@ -7,50 +7,53 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import React, { useState } from "react";
+import { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { columns } from "../constants/formData";
 
 function EmployeeTable() {
   const employees = useSelector((state) => state.employee);
 
-  const [searchTerm, setSearchTerm] = useState("");
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  //TODO : a voir comment quand j'efface l'input que le tableau revient au debut
-  const filteredEmployees =
-    searchTerm.trim() === ""
-      ? employees
-      : employees.filter((employee) => {
-          const firstName = employee.firstName
-            ? employee.firstName.toLowerCase()
-            : "";
-          const lastName = employee.lastName
-            ? employee.lastName.toLowerCase()
-            : "";
-          const department = employee.department
-            ? employee.department.toLowerCase()
-            : "";
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
-          return (
-            firstName.includes(searchTerm.toLowerCase()) ||
-            lastName.includes(searchTerm.toLowerCase()) ||
-            department.includes(searchTerm.toLowerCase())
-          );
-        });
+  const filteredEmployees = useMemo(
+    () =>
+      search.trim() === ""
+        ? employees
+        : employees.filter((employee) => {
+            const firstName = employee.firstName
+              ? employee.firstName.toLowerCase()
+              : "";
+            const lastName = employee.lastName
+              ? employee.lastName.toLowerCase()
+              : "";
+            const department = employee.department
+              ? employee.department.toLowerCase()
+              : "";
+
+            return (
+              firstName.includes(search.toLowerCase()) ||
+              lastName.includes(search.toLowerCase()) ||
+              department.includes(search.toLowerCase())
+            );
+          }),
+    [search, employees]
+  );
 
   const handleChangePage = (e, newPage) => {
     setPage(newPage);
-    setPage(0);
   };
 
   const handleChangeRowsPerPage = (e) => {
     setRowsPerPage(+e.target.value);
     setPage(0);
   };
+
   const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-    setPage(1);
+    setSearch(e.target.value);
+    setPage(0);
   };
 
   // Formatage des dates pour l'affichage
@@ -65,7 +68,7 @@ function EmployeeTable() {
         type="search"
         variant="outlined"
         placeholder="Search"
-        value={searchTerm}
+        value={search}
         onChange={handleSearch}
         sx={{
           height: "40px",
@@ -103,14 +106,14 @@ function EmployeeTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {employees.length === 0 ? (
+            {filteredEmployees.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={columns.length} align="center">
                   Aucun employé trouvé
                 </TableCell>
               </TableRow>
             ) : (
-              employees
+              filteredEmployees
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => (
                   <TableRow
@@ -142,7 +145,7 @@ function EmployeeTable() {
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
-        count={employees.length}
+        count={filteredEmployees.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}

@@ -1,7 +1,11 @@
-import CreateEmployee from "../components/CreateEmployee";
+import EmployeeForm from "../components/EmployeeForm";
 
 function CreateEmploye() {
-  return <CreateEmployee />;
+  return (
+    <div className="container container-create-employe">
+      <EmployeeForm />
+    </div>
+  );
 }
 
 CreateEmploye.propTypes = {};

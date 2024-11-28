@@ -14,7 +14,6 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import "snibix-modal/dist/Modal.css";
 import { z } from "zod";
 import { departments, usStates } from "../constants/formData";
 import { addEmployee } from "../redux/slice/employeeSlice";
@@ -133,7 +132,6 @@ const EmployeeForm = () => {
                 <Typography variant="h6" sx={{ mt: 2, color: "#5f6f1f" }}>
                   Adresse
                 </Typography>
-
                 <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
                   <TextField
                     fullWidth
@@ -166,6 +164,7 @@ const EmployeeForm = () => {
                     defaultValue=""
                     fullWidth
                     select
+                    id="state"
                     label="State"
                     {...register("state")}
                     error={!!errors.state}
@@ -184,6 +183,7 @@ const EmployeeForm = () => {
                     defaultValue=""
                     fullWidth
                     select
+                    id="department"
                     label="Départment"
                     {...register("department")}
                     error={!!errors.department}
@@ -208,7 +208,6 @@ const EmployeeForm = () => {
               </Stack>
             </form>
             <MessageModal
-              className="modal-backdrop"
               isOpen={isOpen}
               close={() => setIsOpen(false)}
               title="Employee created susscessfuly !"
