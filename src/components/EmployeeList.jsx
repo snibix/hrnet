@@ -10,6 +10,7 @@ import TableRow from "@mui/material/TableRow";
 import { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import employeeColumns from "../columns/employeeColumns";
+import formatDate from "../utils/formatDate";
 
 function EmployeeTable() {
   const employees = useSelector((state) => state.employee);
@@ -54,12 +55,6 @@ function EmployeeTable() {
   const handleSearch = (e) => {
     setSearch(e.target.value);
     setPage(0);
-  };
-
-  // Formatage des dates pour l'affichage
-  const formatDate = (dateString) => {
-    if (!dateString) return "";
-    return new Date(dateString).toLocaleDateString();
   };
 
   return (
@@ -118,24 +113,17 @@ function EmployeeTable() {
                 .map((row, index) => (
                   <TableRow
                     hover
-                    role="checkbox"
                     tabIndex={-1}
-                    key={row.id || index}
+                    key={row.id}
                     sx={{
-                      backgroundColor: index % 2 === 0 ? "#ffffff" : "#f5f5f5",
+                      backgroundColor: index % 2 ? "#f5f5f5" : "#ffffff",
                     }}
                   >
-                    {employeeColumns.map((column) => {
-                      let value = row[column.id];
-
-                      if (
-                        column.id === "dateOfBirth" ||
-                        column.id === "startDate"
-                      ) {
-                        value = formatDate(value);
-                      }
-                      return <TableCell key={column.id}>{value}</TableCell>;
-                    })}
+                    {employeeColumns.map(({ id, type }) => (
+                      <TableCell key={id}>
+                        {type === "date" ? formatDate(row[id]) : row[id]}
+                      </TableCell>
+                    ))}
                   </TableRow>
                 ))
             )}
