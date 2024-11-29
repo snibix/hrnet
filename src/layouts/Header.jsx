@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 function Header() {
   return (
-    <div className="nav">
+    <header className="nav">
       <div className="container">
         <nav className="nav-main">
           <NavLink to="/">
@@ -15,7 +15,7 @@ function Header() {
           </NavLink>
         </nav>
       </div>
-    </div>
+    </header>
   );
 }
 
