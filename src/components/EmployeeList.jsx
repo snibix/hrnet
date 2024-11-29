@@ -9,7 +9,7 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import { columns } from "../constants/formData";
+import employeeColumns from "../columns/employeeColumns";
 
 function EmployeeTable() {
   const employees = useSelector((state) => state.employee);
@@ -90,7 +90,7 @@ function EmployeeTable() {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {columns.map((column) => (
+              {employeeColumns.map((column) => (
                 <TableCell
                   key={column.id}
                   style={{ minWidth: column.minWidth }}
@@ -108,7 +108,7 @@ function EmployeeTable() {
           <TableBody>
             {filteredEmployees.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={columns.length} align="center">
+                <TableCell colSpan={employeeColumns.length} align="center">
                   Aucun employé trouvé
                 </TableCell>
               </TableRow>
@@ -125,7 +125,7 @@ function EmployeeTable() {
                       backgroundColor: index % 2 === 0 ? "#ffffff" : "#f5f5f5",
                     }}
                   >
-                    {columns.map((column) => {
+                    {employeeColumns.map((column) => {
                       let value = row[column.id];
 
                       if (

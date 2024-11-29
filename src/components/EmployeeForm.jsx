@@ -15,7 +15,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { z } from "zod";
-import { departments, usStates } from "../constants/formData";
+import departments from "../consts/departments";
+import states from "../consts/states";
 import { addEmployee } from "../redux/slice/employeeSlice";
 import theme from "../styles/theme";
 import MessageModal from "./MessageModal";
@@ -57,7 +58,6 @@ const EmployeeForm = () => {
   });
 
   const submit = (data) => {
-    console.log("Form Data:", data);
     dispatch(addEmployee(data));
     reset();
     setIsOpen(true);
@@ -170,7 +170,7 @@ const EmployeeForm = () => {
                     error={!!errors.state}
                     helperText={errors.state?.message}
                   >
-                    {usStates.map((states) => (
+                    {states.map((states) => (
                       <MenuItem
                         key={states.abbreviation}
                         value={states.abbreviation}

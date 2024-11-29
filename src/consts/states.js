@@ -1,4 +1,4 @@
-export const usStates = [
+const states = [
   { name: "Alabama", abbreviation: "AL" },
   { name: "Alaska", abbreviation: "AK" },
   { name: "American Samoa", abbreviation: "As" },
@@ -60,23 +60,4 @@ export const usStates = [
   { name: "Wyoming", abbreviation: "WY" },
 ];
 
-// Les départements
-export const departments = [
-  { id: 1, name: "Ressources Client" },
-  { id: 2, name: "Marketing Humaines" },
-  { id: 3, name: "Développement" },
-  { id: 4, name: "Finance" },
-  { id: 5, name: "Ventes" },
-];
-
-export const columns = [
-  { id: "firstName", label: "First Name", minWidth: 50 },
-  { id: "lastName", label: "Last Name", minWidth: 50 },
-  { id: "dateOfBirth", label: "Date of Birth", minWidth: 50 },
-  { id: "startDate", label: "Start Date", minWidth: 50 },
-  { id: "street", label: "Street", minWidth: 50 },
-  { id: "city", label: "City", minWidth: 50 },
-  { id: "state", label: "State", minWidth: 50 },
-  { id: "zipCode", label: "Zip Code", minWidth: 50 },
-  { id: "department", label: "Department", minWidth: 50 },
-];
+export default states;
