@@ -9,6 +9,4 @@ function ListEmployee() {
   );
 }
 
-ListEmployee.propTypes = {};
-
 export default ListEmployee;
